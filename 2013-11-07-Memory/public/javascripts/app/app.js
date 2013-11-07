@@ -5,6 +5,7 @@ function initialize(){
 
   // submit handlers
   $('#userInput').on('submit', submitStartGame);
+  $('#gameBoard').on('click', '.card', clickCard);
 }
 
 // --------------------------------------------------
@@ -31,6 +32,20 @@ function submitStartGame(e)
 
 }
 
+function clickCard(e) {
+  //get card index of clicked card
+  var cardLocation = $(this).data('id');
+  var gameid = $('#gameBoard').data('gameid');
+  alert(gameid);
+  //send cardLocation via ajax to server and get the card's hidden value back
+  sendGenericAjaxRequest('/click', {cardLocation: cardLocation, gameid: gameid }, 'GET', null, e, function(data, status, jqXHR){
+    console.log(data);
+  });
+}
+
+//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
+
 function sendGenericAjaxRequest(url, data, verb, altVerb, event, successFn){
   var options = {};
   options.url = url;
@@ -51,10 +66,11 @@ function sendGenericAjaxRequest(url, data, verb, altVerb, event, successFn){
 
 function htmlDrawGameBoard(game)
 {
+  $('#gameBoard').attr('data-gameid', game._id);
   $('#userInput input').val('');
   $('#userInput').hide();
   $('#goodLuck').text('Good luck, '+game.playerName);
-  for (var i=0; i<game.gameBoard.length; i++)
+  for (var i=0; i< (game.numPairs * 2); i++)
   {
     $td = $('<div>');
     $td.addClass('card', 'unmatched');
