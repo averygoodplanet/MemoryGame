@@ -1,4 +1,7 @@
-var colors = require('colors');
+var mongoose = require('mongoose');
+var Game = mongoose.model('Game');
+
+// var colors = require('colors');
 // Colors
 // bold, italic, underline, inverse, yellow, cyan,
 // white, magenta, green, red, grey, blue, rainbow,
@@ -10,4 +13,11 @@ var colors = require('colors');
 
 exports.index = function(req, res){
   res.render('game/index', {title: 'Memory Game'});
+};
+
+// POST /new
+exports.create = function(req, res){
+  new Game(req.body).save(function(err, game){
+    console.log('game: ' +game);
+  });
 };

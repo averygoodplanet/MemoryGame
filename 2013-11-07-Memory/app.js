@@ -1,3 +1,5 @@
+require('./models/game');
+
 // express application
 var game = require('./routes/game');
 
@@ -6,7 +8,9 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var less = require('express-less');
+var mongoose = require('mongoose');
 var app = express();
+mongoose.connect('mongodb://localhost/memoryGame');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -27,6 +31,7 @@ if ('development' == app.get('env')) {
 
 // route definitions
 app.get('/', game.index);
+app.post('/new', game.create);
 
 // start server
 http.createServer(app).listen(app.get('port'), function(){
