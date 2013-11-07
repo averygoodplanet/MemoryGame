@@ -14,10 +14,6 @@ function initialize(){
 
 function submitStartGame(e)
 {
-  console.log(this);
-  debugger;
-
-
   // package the data for submission to database
   var url = $(this).attr('action');
   var numPairs = parseInt($('input[name=numberPairs]').val());
@@ -35,7 +31,15 @@ function submitStartGame(e)
 
 }
 
-function sendGenericAjaxRequest(url, data, verb, altVerb, event, successFn)
-{
+function sendGenericAjaxRequest(url, data, verb, altVerb, event, successFn){
+  var options = {};
+  options.url = url;
+  options.type = verb;
+  options.data = data;
+  options.success = successFn;
+  options.error = function(jqXHR, status, error){console.log(error);};
 
+  if(altVerb) options.data._method = altVerb;
+  $.ajax(options);
+  if(event) event.preventDefault();
 }
