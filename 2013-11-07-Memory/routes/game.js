@@ -16,14 +16,21 @@ exports.index = function(req, res){
   res.render('game/index', {title: 'Memory Game'});
 };
 
+/*
+ * GET /click
+ */
+
+exports.click = function(req, res){
+  //req.query has cardLocation
+  console.log('req.query');
+  console.log(req.query);
+};
+
 // POST /new
 exports.create = function(req, res){
   // create array
-  console.log("req.body.numPairs");
-  console.log(req.body.numPairs);
   var gameboardArray = createGameBoardArray(req.body.numPairs);
   req.body.gameBoard = gameboardArray
-console.log('in create ...' +req.body.gameBoard);
   // new Game(newData);
   new Game(req.body).save(function(err, game){
     game.gameBoard = null;
