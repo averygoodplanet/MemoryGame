@@ -19,5 +19,6 @@ exports.index = function(req, res){
 exports.create = function(req, res){
   new Game(req.body).save(function(err, game){
     console.log('game: ' +game);
+    res.send(game);
   });
 };
