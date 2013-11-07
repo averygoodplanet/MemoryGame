@@ -22,11 +22,10 @@ exports.create = function(req, res){
   console.log("req.body.numPairs");
   console.log(req.body.numPairs);
   var gameboardArray = createGameBoardArray(req.body.numPairs);
-  //  req.body.gameBoard = array.
-
+  req.body.gameBoard = gameboardArray
+console.log('in create ...' +req.body.gameBoard);
   // new Game(newData);
   new Game(req.body).save(function(err, game){
-    console.log('game: ' +game);
     res.send(game);
     //check that we are returning a proper array
     //in gameBoard property in browser.
@@ -34,13 +33,12 @@ exports.create = function(req, res){
 };
 
 function createGameBoardArray(numPairs){
+  // Creates an array of size 2n containing pairs of values in random order
   var array = [];
   var intPairs = parseInt(numPairs);
   var array2 = (_.range(1, (intPairs+1)));
   var array3 = (_.range(1, (intPairs+1)));
   array = array2.concat(array3);
   array = _.shuffle(array);
-  console.log('array: ');
-  console.log(array);
   return array;
 }

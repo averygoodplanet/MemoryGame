@@ -14,6 +14,7 @@ function initialize(){
 
 function submitStartGame(e)
 {
+
   // package the data for submission to database
   var url = $(this).attr('action');
   var numPairs = parseInt($('input[name=numberPairs]').val());
@@ -23,8 +24,7 @@ function submitStartGame(e)
 
   // call "send ajax data" function
   sendGenericAjaxRequest(url, {numPairs:numPairs, playerName:playerName}, verb, null, e, function(data, status, jqXHR){
-    console.log('after Ajax');
-    console.log(data);
+    htmlDrawGameBoard(data);
   });
 
   // prevent default action
@@ -42,4 +42,23 @@ function sendGenericAjaxRequest(url, data, verb, altVerb, event, successFn){
   if(altVerb) options.data._method = altVerb;
   $.ajax(options);
   if(event) event.preventDefault();
+}
+
+// ------------------------------------------------------
+// ------------------------------------------------------
+// ------------------------------------------------------
+// html functions
+
+function htmlDrawGameBoard(game)
+{
+  $('#userInput input').val('');
+  $('#userInput').hide();
+  $('#goodLuck').text('Good luck, '+game.playerName);
+  for (var i=0; i<game.gameBoard.length; i++)
+  {
+    $td = $('<div>');
+    $td.addClass('card', 'unmatched');
+    $td.attr('data-id', i);
+    $('#gameBoard').append($td);
+  }
 }
