@@ -26,7 +26,7 @@ exports.create = function(req, res){
 console.log('in create ...' +req.body.gameBoard);
   // new Game(newData);
   new Game(req.body).save(function(err, game){
-    res.send(game);
+    res.send(game.id);
     //check that we are returning a proper array
     //in gameBoard property in browser.
   });
