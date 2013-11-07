@@ -54,7 +54,7 @@ function htmlDrawGameBoard(game)
   $('#userInput input').val('');
   $('#userInput').hide();
   $('#goodLuck').text('Good luck, '+game.playerName);
-  for (var i=0; i<game.gameBoard.length; i++)
+  for (var i=0; i< (game.numPairs * 2); i++)
   {
     $td = $('<div>');
     $td.addClass('card', 'unmatched');
