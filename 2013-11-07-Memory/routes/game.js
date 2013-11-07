@@ -24,6 +24,14 @@ exports.click = function(req, res){
   //req.query has cardLocation
   console.log('req.query');
   console.log(req.query);
+
+  // find current game by id
+  Game.findById(req.query.gameid, function(err, game){
+    // within that game, go to position 'cardLocation'
+    // and get value (property = gameBoard)
+    // send retrieved value back to browser
+    res.send({value: game.gameBoard[req.query.cardLocation]});
+  });
 };
 
 // POST /new
@@ -33,12 +41,8 @@ exports.create = function(req, res){
   req.body.gameBoard = gameboardArray
   // new Game(newData);
   new Game(req.body).save(function(err, game){
-<<<<<<< HEAD
-    res.send(game.id);
-=======
     game.gameBoard = null;
     res.send(game);
->>>>>>> 8629cfbe8f77eaba733eb79717e66940d79131e3
     //check that we are returning a proper array
     //in gameBoard property in browser.
   });

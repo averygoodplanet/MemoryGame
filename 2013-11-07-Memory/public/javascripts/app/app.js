@@ -34,12 +34,14 @@ function submitStartGame(e)
 
 function clickCard(e) {
   //get card index of clicked card
-  var cardLocation = $(this).data('id');
+  var $clickedCard = $(this);
+  var cardLocation = $clickedCard.data('id');
   var gameid = $('#gameBoard').data('gameid');
-  alert(gameid);
   //send cardLocation via ajax to server and get the card's hidden value back
-  sendGenericAjaxRequest('/click', {cardLocation: cardLocation, gameid: gameid }, 'GET', null, e, function(data, status, jqXHR){
-    console.log(data);
+  sendGenericAjaxRequest('/click', {cardLocation: cardLocation, gameid: gameid }, 'GET', null, e, function(card, status, jqXHR){
+    console.log(card);
+    htmlFlipCard($clickedCard, card.value);
+
   });
 }
 
@@ -77,4 +79,10 @@ function htmlDrawGameBoard(game)
     $td.attr('data-id', i);
     $('#gameBoard').append($td);
   }
+}
+
+function htmlFlipCard($clickedCard, cardValue)
+{
+  $clickedCard.text(cardValue);
+  $clickedCard.addClass('faceUp');
 }
