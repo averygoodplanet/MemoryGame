@@ -37,36 +37,34 @@ function clickCard(e) {
   var $clickedCard = $(this);
   var cardLocation = $clickedCard.data('id');
   var gameid = $('#gameBoard').data('gameid');
+  var cardValue = null;
 
   // if card is already face up, exit function
   if($clickedCard.hasClass('faceUp'))
     return;
 
-  // check for number of active cards (0, 1, or 2)
-  switch($('.faceUp').length){
-    case 0:
-      console.log('zero card up');
-    break;
-
-    case 1:
-    console.log('one card up');
-    break;
-
-    case 2:
-    console.log('two cards up');
-    break;
-
-    default:
-    console.log('other');
-  }
-
-
   //send cardLocation via ajax to server and get the card's hidden value back
   sendGenericAjaxRequest('/click', {cardLocation: cardLocation, gameid: gameid }, 'GET', null, e, function(card, status, jqXHR){
-    console.log(card);
-  htmlFlipCard($clickedCard, card.value);
+    cardValue = card.value;
+    // take action based on how many cards are .faceUp at time of the click
+    switch($('.faceUp').length){
+      case 0:
+        console.log('zero card up');
+        htmlFlipCardUp($clickedCard, cardValue);
+        break;
+      case 1:
+        console.log('one card up');
+        htmlFlipCardUp($clickedCard, cardValue);
+        break;
+      case 2:
+        console.log('two cards up');
+        htmlFlipCardsDown();
+        htmlFlipCardUp($clickedCard, cardValue);
+        break;
+      default:
+        alert('Error in app.js switch statement on $(".faceUp").length');
+    }
   });
-
 }
 
 //----------------------------------------------------------------------------//
@@ -105,8 +103,13 @@ function htmlDrawGameBoard(game)
   }
 }
 
-function htmlFlipCard($clickedCard, cardValue)
+function htmlFlipCardUp($clickedCard, cardValue)
 {
   $clickedCard.text(cardValue);
   $clickedCard.addClass('faceUp');
+}
+
+function htmlFlipCardsDown(){
+  $('.faceUp').text('');
+  $('.faceUp').removeClass('faceUp');
 }
