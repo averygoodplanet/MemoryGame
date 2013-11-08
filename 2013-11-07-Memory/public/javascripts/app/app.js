@@ -40,31 +40,47 @@ function clickCard(e) {
   var cardValue = null;
 
   // if card is already face up, exit function
-  if($clickedCard.hasClass('faceUp'))
+  if($clickedCard.hasClass('faceUp') || $clickedCard.hasClass('matched'))
     return;
 
   //send cardLocation via ajax to server and get the card's hidden value back
   sendGenericAjaxRequest('/click', {cardLocation: cardLocation, gameid: gameid }, 'GET', null, e, function(card, status, jqXHR){
     cardValue = card.value;
-    // take action based on how many cards are .faceUp at time of the click
-    switch($('.faceUp').length){
-      case 0:
-        console.log('zero card up');
-        htmlFlipCardUp($clickedCard, cardValue);
-        break;
-      case 1:
-        console.log('one card up');
-        htmlFlipCardUp($clickedCard, cardValue);
-        break;
-      case 2:
-        console.log('two cards up');
-        htmlFlipCardsDown();
-        htmlFlipCardUp($clickedCard, cardValue);
-        break;
-      default:
-        alert('Error in app.js switch statement on $(".faceUp").length');
+    flipCardHandler($clickedCard, cardValue);
+    if($('.faceUp').length > 1){
+      matchingCardsHandler();
     }
   });
+}
+
+function flipCardHandler($clickedCard, cardValue) {
+  // take action based on how many cards are .faceUp at time of the click
+  switch($('.faceUp').length){
+    case 0:
+      htmlFlipCardUp($clickedCard, cardValue);
+      break;
+    case 1:
+      htmlFlipCardUp($clickedCard, cardValue);
+      break;
+    case 2:
+      htmlFlipCardsDown();
+      htmlFlipCardUp($clickedCard, cardValue);
+      break;
+    default:
+      alert('Error in app.js switch statement on $(".faceUp").length');
+  }
+}
+
+function matchingCardsHandler() {
+  var $faceUpCards = $('.faceUp');
+  var faceUpCardValues = [];
+
+  for(var i =0; i < 2; i++){
+    faceUpCardValues.push(parseInt($faceUpCards[i].textContent));
+  }
+
+  var isMatch = ( faceUpCardValues[0] === faceUpCardValues[1] );
+  debugger;
 }
 
 //----------------------------------------------------------------------------//
