@@ -58,3 +58,20 @@ function createGameBoardArray(numPairs){
   array = _.shuffle(array);
   return array;
 }
+
+/*
+ * POST /end
+ */
+
+exports.end = function(req, res){
+  var endTime = Date.now();
+
+  // find the game by id
+  Game.findById(req.body.gameid, function(err, game){
+    var timeInSeconds = ((endTime - game.startTime) / 1000).toFixed();
+    Game.findByIdAndUpdate(req.body.gameid, {timeInSeconds: timeInSeconds}, function(err, game){
+      console.log(game);
+      res.send(game);
+    });
+  });
+};

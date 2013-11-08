@@ -33,6 +33,7 @@ if ('development' == app.get('env')) {
 app.get('/', game.index);
 app.post('/new', game.create);
 app.get('/click', game.click);
+app.post('/end', game.end);
 
 // start server
 http.createServer(app).listen(app.get('port'), function(){

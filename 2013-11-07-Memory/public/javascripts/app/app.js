@@ -48,7 +48,7 @@ function clickCard(e) {
     cardValue = card.value;
     flipCardHandler($clickedCard, cardValue);
     if($('.faceUp').length > 1){
-      matchingCardsHandler();
+      matchingCardsHandler(e);
     }
   });
 }
@@ -71,7 +71,7 @@ function flipCardHandler($clickedCard, cardValue) {
   }
 }
 
-function matchingCardsHandler() {
+function matchingCardsHandler(e) {
   var $faceUpCards = $('.faceUp');
   var faceUpCardValues = [];
 
@@ -85,18 +85,22 @@ function matchingCardsHandler() {
     $faceUpCards.addClass('matched').removeClass('faceUp');
     var areAllCardsMatched = ($('.card').length === $('.matched').length);
     if(areAllCardsMatched){
-      gameWrapUp();
+      gameWrapUp(e);
     }
   }
 }
 
-function gameWrapUp() {
+function gameWrapUp(e) {
   // Contact the server (sending gameid and ??? else) and have server save the game (for stats in future)
   // then in call back:
   // Remove the cards from under the gameboard div
   // Display message to user (e.g. it took them X amount of time to finish, congratulations; start a new game by filling in field)
   // Show User Input field
+  var gameid = $('#gameBoard').data('gameid');
 
+  sendGenericAjaxRequest('/end', {gameid: gameid }, 'POST', null, e, function(data, status, jqXHR){
+    console.log(data);
+  });
 }
 
 //----------------------------------------------------------------------------//

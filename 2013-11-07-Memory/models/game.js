@@ -7,8 +7,7 @@ var Game = mongoose.Schema({
   numPairs: Number,
   playerName: String,
   startTime: {type: Date, default: Date.now},
-  endTime: Date,
-  overallTime: Number,
+  timeInSeconds: Number,
   gameBoard: [Number]
 });
 
