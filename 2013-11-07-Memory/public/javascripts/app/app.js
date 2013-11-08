@@ -39,7 +39,7 @@ function clickCard(e) {
   var gameid = $('#gameBoard').data('gameid');
   var cardValue = null;
 
-  // if card is already face up, exit function
+  // If user clicked on a card that is already face up or a card that is matched (out-of-play), then exit this function.
   if($clickedCard.hasClass('faceUp') || $clickedCard.hasClass('matched'))
     return;
 
@@ -80,7 +80,23 @@ function matchingCardsHandler() {
   }
 
   var isMatch = ( faceUpCardValues[0] === faceUpCardValues[1] );
-  debugger;
+
+  if(isMatch){
+    $faceUpCards.addClass('matched').removeClass('faceUp');
+    var areAllCardsMatched = ($('.card').length === $('.matched').length);
+    if(areAllCardsMatched){
+      gameWrapUp();
+    }
+  }
+}
+
+function gameWrapUp() {
+  // Contact the server (sending gameid and ??? else) and have server save the game (for stats in future)
+  // then in call back:
+  // Remove the cards from under the gameboard div
+  // Display message to user (e.g. it took them X amount of time to finish, congratulations; start a new game by filling in field)
+  // Show User Input field
+
 }
 
 //----------------------------------------------------------------------------//
