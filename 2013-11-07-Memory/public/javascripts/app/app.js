@@ -91,15 +91,21 @@ function matchingCardsHandler(e) {
 }
 
 function gameWrapUp(e) {
-  // Contact the server (sending gameid and ??? else) and have server save the game (for stats in future)
-  // then in call back:
-  // Remove the cards from under the gameboard div
-  // Display message to user (e.g. it took them X amount of time to finish, congratulations; start a new game by filling in field)
-  // Show User Input field
+  // Contact the server (sending gameid) and have server save the game's duration (for stats in future)
   var gameid = $('#gameBoard').data('gameid');
 
-  sendGenericAjaxRequest('/end', {gameid: gameid }, 'POST', null, e, function(data, status, jqXHR){
-    console.log(data);
+  sendGenericAjaxRequest('/end', {gameid: gameid }, 'POST', null, e, function(game, status, jqXHR){
+    console.log(game);
+    // in call back:
+    // Remove the cards from under the gameboard div
+    $('#gameBoard').children().remove();
+    // Remove game id from gameboard
+    $('#gameBoard').attr('data-gameid', '');
+    // Display message to user (e.g. it took them X amount of time to finish, congratulations; start a new game by filling in field)
+    var displayString = "Congratulations, "+ game.playerName + " you finished matching the " + game.numPairs + " pairs in " + game.timeInSeconds + " seconds.  See upper right-hand corner to start a new game.";
+    $('#goodLuck').text(displayString);
+    // Show User Input field
+    $('#userInput').show();
   });
 }
 
